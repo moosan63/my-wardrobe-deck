@@ -1,0 +1,9 @@
+name = "my-wardrobe-deck"
+compatibility_date = "2024-08-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "my-wardrobe-deck-db"
+database_id = "local"
