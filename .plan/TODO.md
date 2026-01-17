@@ -5,7 +5,7 @@
 | フェーズ | 状態 |
 |---------|------|
 | Phase 0 | 完了 |
-| Phase 1 | 未着手 |
+| Phase 1 | 完了 |
 | Phase 2 | 未着手 |
 | Phase 3 | 未着手 |
 | Phase 4 | 未着手 |
@@ -67,23 +67,23 @@ D1データベーススキーマとCRUD操作を行うモデル層を実装す�
 
 ### 作業内容
 
-- [ ] D1マイグレーションファイル作成（`migrations/0001_create_items.sql`）
-- [ ] 型定義作成（`app/types/item.ts`）
-  - [ ] Item型
-  - [ ] CreateItemInput型
-  - [ ] UpdateItemInput型
-- [ ] 定数定義（`app/lib/constants.ts`）
-  - [ ] CATEGORIES定数
-  - [ ] カテゴリ表示名マッピング
-- [ ] DBアクセス層実装（`app/db/items.ts`）
-  - [ ] getAllItems()
-  - [ ] getItemById()
-  - [ ] getItemsByCategory()
-  - [ ] createItem()
-  - [ ] updateItem()
-  - [ ] deleteItem()
-- [ ] TDD: テストファイル作成（`tests/db/items.test.ts`）
-  - [ ] 各CRUD関数のテスト
+- [x] D1マイグレーションファイル作成（`migrations/0001_create_items.sql`）
+- [x] 型定義作成（`app/types/item.ts`）
+  - [x] Item型
+  - [x] CreateItemInput型
+  - [x] UpdateItemInput型
+- [x] 定数定義（`app/lib/constants.ts`）
+  - [x] CATEGORIES定数
+  - [x] カテゴリ表示名マッピング
+- [x] DBアクセス層実装（`app/db/items.ts`）
+  - [x] getAllItems()
+  - [x] getItemById()
+  - [x] getItemsByCategory()
+  - [x] createItem()
+  - [x] updateItem()
+  - [x] deleteItem()
+- [x] TDD: テストファイル作成（`tests/db/items.test.ts`）
+  - [x] 各CRUD関数のテスト
 
 ### 変更対象
 - `migrations/0001_create_items.sql`（新規）
@@ -93,8 +93,8 @@ D1データベーススキーマとCRUD操作を行うモデル層を実装す�
 - `tests/db/items.test.ts`（新規）
 
 ### 完了条件
-- [ ] マイグレーション実行可能
-- [ ] 全CRUDテストがパス
+- [x] マイグレーション実行可能
+- [x] 全CRUDテストがパス
 
 ### ユーザー確認項目
 - テスト結果の確認
