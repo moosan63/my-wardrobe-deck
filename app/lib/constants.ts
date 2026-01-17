@@ -23,6 +23,17 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 } as const
 
 /**
+ * カテゴリのFont Awesomeアイコンクラス
+ */
+export const CATEGORY_ICONS: Record<Category, string> = {
+  outer: 'fa-vest',
+  tops: 'fa-shirt',
+  bottoms: 'fa-person',
+  shoes: 'fa-shoe-prints',
+  accessories: 'fa-gem',
+} as const
+
+/**
  * カテゴリが有効かどうかを判定
  */
 export function isValidCategory(value: string): value is Category {
