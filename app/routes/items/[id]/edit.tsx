@@ -1,0 +1,178 @@
+import { createRoute } from 'honox/factory'
+import { Layout } from '../../../components/layout/Layout'
+import { Button } from '../../../components/ui/Button'
+import { ItemForm } from '../../../components/items/ItemForm'
+import { getItemById, updateItem } from '../../../db/items'
+import { updateItemSchema } from '../../../lib/validation'
+import type { Category, Item } from '../../../types/item'
+
+interface FormErrors {
+  name?: string
+  category?: string
+  color?: string
+  brand?: string
+  description?: string
+  general?: string
+}
+
+export default createRoute(async (c) => {
+  const db = c.env.DB
+  const idParam = c.req.param('id') ?? ''
+  const id = parseInt(idParam, 10)
+
+  // IDバリデーション
+  if (isNaN(id) || id <= 0) {
+    return c.render(
+      <Layout>
+        <div class="container mx-auto px-4 py-8">
+          <div class="text-center py-16">
+            <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500/50 mb-4"></i>
+            <h2 class="text-xl font-medium text-primary mb-2">
+              無効なIDです
+            </h2>
+            <p class="text-secondary mb-6">
+              指定されたIDは有効ではありません
+            </p>
+            <Button variant="primary" href="/">
+              <i class="fa-solid fa-home mr-2"></i>
+              ホームに戻る
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    )
+  }
+
+  let errors: FormErrors = {}
+  let formData: Partial<Item> | null = null
+
+  // POST処理（フォーム送信時）
+  if (c.req.method === 'POST') {
+    const body = await c.req.parseBody()
+    const method = body._method
+
+    if (method === 'PUT') {
+      // フォームデータを取得
+      formData = {
+        id,
+        name: (body.name as string) ?? '',
+        category: (body.category as Category) ?? 'tops',
+        color: (body.color as string) ?? '',
+        brand: (body.brand as string) || null,
+        description: (body.description as string) || null,
+        created_at: '',
+        updated_at: '',
+      }
+
+      // バリデーション
+      const validationResult = updateItemSchema.safeParse({
+        name: formData.name,
+        category: formData.category,
+        color: formData.color,
+        brand: formData.brand,
+        description: formData.description,
+      })
+
+      if (!validationResult.success) {
+        // バリデーションエラーをフィールドごとに振り分け
+        for (const err of validationResult.error.errors) {
+          const field = err.path[0] as keyof FormErrors
+          if (field && !errors[field]) {
+            errors[field] = err.message
+          }
+        }
+      } else {
+        // アイテム更新
+        try {
+          const updated = await updateItem(db, id, validationResult.data)
+          if (updated) {
+            // 成功したら詳細ページにリダイレクト
+            return c.redirect(`/items/${id}`, 302)
+          } else {
+            errors.general = 'アイテムが見つかりませんでした'
+          }
+        } catch (e) {
+          console.error('Failed to update item:', e)
+          errors.general = 'アイテムの更新に失敗しました。もう一度お試しください。'
+        }
+      }
+    }
+  }
+
+  // アイテム取得（GET時、またはPOSTでエラー時に元データを取得）
+  const existingItem = await getItemById(db, id)
+
+  if (!existingItem) {
+    return c.render(
+      <Layout>
+        <div class="container mx-auto px-4 py-8">
+          <div class="text-center py-16">
+            <i class="fa-solid fa-search text-6xl text-secondary/30 mb-4"></i>
+            <h2 class="text-xl font-medium text-primary mb-2">
+              アイテムが見つかりません
+            </h2>
+            <p class="text-secondary mb-6">
+              指定されたアイテムは存在しないか、削除された可能性があります
+            </p>
+            <Button variant="primary" href="/">
+              <i class="fa-solid fa-home mr-2"></i>
+              ホームに戻る
+            </Button>
+          </div>
+        </div>
+      </Layout>
+    )
+  }
+
+  // フォームに表示するデータ（エラー時は送信データを保持）
+  const displayItem: Item = formData
+    ? {
+        id: existingItem.id,
+        name: formData.name ?? existingItem.name,
+        category: formData.category ?? existingItem.category,
+        color: formData.color ?? existingItem.color,
+        brand: formData.brand !== undefined ? formData.brand : existingItem.brand,
+        description: formData.description !== undefined ? formData.description : existingItem.description,
+        created_at: existingItem.created_at,
+        updated_at: existingItem.updated_at,
+      }
+    : existingItem
+
+  return c.render(
+    <Layout>
+      <div class="container mx-auto px-4 py-8">
+        {/* Page Header */}
+        <div class="mb-8">
+          <nav class="text-sm text-secondary mb-2">
+            <a href="/" class="hover:text-accent transition-colors">ホーム</a>
+            <span class="mx-2">/</span>
+            <a href={`/items/${id}`} class="hover:text-accent transition-colors">
+              {existingItem.name}
+            </a>
+            <span class="mx-2">/</span>
+            <span class="text-primary">編集</span>
+          </nav>
+          <h1 class="text-2xl md:text-3xl font-bold text-primary">
+            <i class="fa-solid fa-edit text-accent mr-3" aria-hidden="true"></i>
+            アイテムを編集
+          </h1>
+          <p class="text-secondary mt-2">
+            アイテム情報を変更します
+          </p>
+        </div>
+
+        {/* Form */}
+        <div class="bg-card-bg rounded-lg shadow-sm p-6">
+          <ItemForm
+            item={displayItem}
+            action={`/items/${id}/edit`}
+            method="PUT"
+            cancelUrl={`/items/${id}`}
+            submitLabel="更新"
+            errors={errors}
+          />
+        </div>
+      </div>
+    </Layout>
+  )
+})
