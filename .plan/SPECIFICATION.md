@@ -136,9 +136,62 @@
                                                                                                      
   ---                                                                                                
                                                                                                      
-  ## 検証方法                                                                                        
-                                                                                                     
-  - **ユニットテスト**: Vitest（Cloudflare Workers pool）                                            
-  - **手動確認**: ローカル環境でブラウザ/curl動作確認                                                
-  - **本番確認**: Cloudflareデプロイ後の動作確認                                                     
+  ## 検証方法
+
+  - **ユニットテスト**: Vitest（Cloudflare Workers pool）
+  - **手動確認**: ローカル環境でブラウザ/curl動作確認
+  - **本番確認**: Cloudflareデプロイ後の動作確認
+
+  ---
+
+  ## デザイン要望
+
+  ### 参考サイト
+  - https://hotel-uro.jp/ のような落ち着いたけどハイセンスな色使い・フォント使い
+
+  ### デザイン方針
+  - **ToC ECサイト**を目指すようなデザイン
+  - 使えるところでは **Font Awesome** のようなシンボルを配置していく
+  - **インタラクション性はHonoXの制約上、最低限**でよい
+
+  ### カラーパレット案（hotel-uro.jp参考）
+  | 用途 | 色 |
+  |------|-----|
+  | Primary | #2D3748（ダークグレー） |
+  | Secondary | #718096（ミディアムグレー） |
+  | Accent | #C4A35A（ゴールド/ベージュ） |
+  | Background | #F7FAFC（ライトグレー） |
+  | Card Background | #FFFFFF |
+  | Text | #1A202C |
+
+  ### フォント
+  - 日本語：游ゴシック / Noto Sans JP
+  - 英数字：sans-serif系
+
+  ### アイコン
+  - Font Awesome を使用
+  - カテゴリアイコン例:
+    - outer: fa-jacket / fa-coat
+    - tops: fa-shirt
+    - bottoms: fa-pants（または代替アイコン）
+    - shoes: fa-shoe-prints
+    - accessories: fa-gem / fa-ring
+
+  ---
+
+  ## MVP後の機能（将来実装予定）
+
+  以下は初回スコープ外だが、将来実装予定として記録：
+
+  ### タグ・フィルター機能
+  - 使用季節（春/夏/秋/冬/オールシーズン）
+  - 色（タグとして複数指定可能）
+  - 形（ロングコート、Tシャツ等 - プリセット＋自由入力）
+  - ブランド
+  - 用途（おしゃれ着、普段着、ワンマイルウェア、寝間着など）
+
+  ### その他
+  - Cloudflare Workers Cron Triggers（用途未定、将来的な通知機能等に活用可能）
+  - 画像アップロード機能
+  - 検索・ソート機能                                                     
                                                   
