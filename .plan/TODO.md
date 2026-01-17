@@ -6,7 +6,7 @@
 |---------|------|
 | Phase 0 | 完了 |
 | Phase 1 | 完了 |
-| Phase 2 | 未着手 |
+| Phase 2 | 完了 |
 | Phase 3 | 未着手 |
 | Phase 4 | 未着手 |
 | Phase 5 | 未着手 |
@@ -109,15 +109,15 @@ RESTful APIエンドポイントを実装し、フロントエンドからのCRU
 
 ### 作業内容
 
-- [ ] Zodスキーマ作成（`app/lib/validation.ts`）
-  - [ ] createItemSchema
-  - [ ] updateItemSchema
-- [ ] APIエンドポイント実装
-  - [ ] `app/routes/api/items/index.ts`（GET一覧、POST作成）
-  - [ ] `app/routes/api/items/[id].ts`（GET詳細、PUT更新、DELETE削除）
-- [ ] エラーレスポンスユーティリティ（`app/lib/api-response.ts`）
-- [ ] TDD: テストファイル作成（`tests/api/items.test.ts`）
-  - [ ] 各エンドポイントのテスト
+- [x] Zodスキーマ作成（`app/lib/validation.ts`）
+  - [x] createItemSchema
+  - [x] updateItemSchema
+- [x] APIエンドポイント実装
+  - [x] `app/routes/api/items/index.ts`（GET一覧、POST作成）
+  - [x] `app/routes/api/items/[id].ts`（GET詳細、PUT更新、DELETE削除）
+- [x] エラーレスポンスユーティリティ（`app/lib/api-response.ts`）
+- [x] TDD: テストファイル作成（`tests/api/items.test.ts`）
+  - [x] 各エンドポイントのテスト
 
 ### 変更対象
 - `app/lib/validation.ts`（新規）
@@ -127,7 +127,7 @@ RESTful APIエンドポイントを実装し、フロントエンドからのCRU
 - `tests/api/items.test.ts`（新規）
 
 ### 完了条件
-- [ ] 全APIテストがパス
+- [x] 全APIテストがパス
 - [ ] curlで各エンドポイント動作確認
 
 ### ユーザー確認項目
