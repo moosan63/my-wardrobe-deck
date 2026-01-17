@@ -7,7 +7,7 @@
 | Phase 0 | 完了 |
 | Phase 1 | 完了 |
 | Phase 2 | 完了 |
-| Phase 3 | 未着手 |
+| Phase 3 | 完了 |
 | Phase 4 | 未着手 |
 | Phase 5 | 未着手 |
 | Phase 6 | 未着手 |
@@ -143,22 +143,22 @@ RESTful APIエンドポイントを実装し、フロントエンドからのCRU
 
 ### 作業内容
 
-- [ ] 基本UIコンポーネント作成
-  - [ ] `app/components/ui/Button.tsx`
-  - [ ] `app/components/ui/Card.tsx`
-- [ ] レイアウトコンポーネント作成
-  - [ ] `app/components/layout/Header.tsx`
-  - [ ] `app/components/layout/Footer.tsx`
-  - [ ] `app/components/layout/Layout.tsx`
-- [ ] アイテムコンポーネント作成
-  - [ ] `app/components/items/ItemCard.tsx`
-  - [ ] `app/components/items/CategorySection.tsx`
-- [ ] ホームページ実装（`app/routes/index.tsx`）
-  - [ ] カテゴリ別グルーピング表示
-- [ ] Tailwind CSS設定
-  - [ ] カスタムカラーパレット設定
-  - [ ] フォント設定
-- [ ] Font Awesome導入
+- [x] 基本UIコンポーネント作成
+  - [x] `app/components/ui/Button.tsx`
+  - [x] `app/components/ui/Card.tsx`
+- [x] レイアウトコンポーネント作成
+  - [x] `app/components/layout/Header.tsx`
+  - [x] `app/components/layout/Footer.tsx`
+  - [x] `app/components/layout/Layout.tsx`
+- [x] アイテムコンポーネント作成
+  - [x] `app/components/items/ItemCard.tsx`
+  - [x] `app/components/items/CategorySection.tsx`
+- [x] ホームページ実装（`app/routes/index.tsx`）
+  - [x] カテゴリ別グルーピング表示
+- [x] Tailwind CSS設定
+  - [x] カスタムカラーパレット設定
+  - [x] フォント設定
+- [x] Font Awesome導入
 
 ### 変更対象
 - `app/components/ui/Button.tsx`（新規）
@@ -168,13 +168,13 @@ RESTful APIエンドポイントを実装し、フロントエンドからのCRU
 - `app/components/layout/Layout.tsx`（新規）
 - `app/components/items/ItemCard.tsx`（新規）
 - `app/components/items/CategorySection.tsx`（新規）
-- `app/routes/index.tsx`（新規）
+- `app/routes/index.tsx`（更新）
 - `tailwind.config.js`（更新）
 
 ### 完了条件
-- [ ] カテゴリ別にカードが表示される
-- [ ] レスポンシブ対応（モバイル/タブレット/デスクトップ）
-- [ ] hotel-uro.jp風デザインが適用されている
+- [x] カテゴリ別にカードが表示される
+- [x] レスポンシブ対応（モバイル/タブレット/デスクトップ）
+- [x] hotel-uro.jp風デザインが適用されている
 
 ### ユーザー確認項目
 - ブラウザでの表示確認
