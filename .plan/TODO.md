@@ -8,7 +8,7 @@
 | Phase 1 | 完了 |
 | Phase 2 | 完了 |
 | Phase 3 | 完了 |
-| Phase 4 | 未着手 |
+| Phase 4 | 完了 |
 | Phase 5 | 未着手 |
 | Phase 6 | 未着手 |
 
@@ -190,34 +190,33 @@ RESTful APIエンドポイントを実装し、フロントエンドからのCRU
 
 ### 作業内容
 
-- [ ] フォームコンポーネント作成
-  - [ ] `app/components/ui/Input.tsx`
-  - [ ] `app/components/ui/Select.tsx`
-  - [ ] `app/components/ui/Textarea.tsx`
-  - [ ] `app/components/items/ItemForm.tsx`
-- [ ] 新規作成ページ（`app/routes/items/new.tsx`）
-- [ ] 詳細ページ（`app/routes/items/[id]/index.tsx`）
-- [ ] 編集ページ（`app/routes/items/[id]/edit.tsx`）
-- [ ] 削除確認モーダル/処理
-- [ ] フォームバリデーション（クライアントサイド）
-- [ ] トースト通知コンポーネント（`app/components/ui/Toast.tsx`）
+- [x] フォームコンポーネント作成
+  - [x] `app/components/ui/Input.tsx`
+  - [x] `app/components/ui/Select.tsx`
+  - [x] `app/components/ui/Textarea.tsx`
+  - [x] `app/components/items/ItemForm.tsx`
+- [x] 新規作成ページ（`app/routes/items/new.tsx`）
+- [x] 詳細ページ（`app/routes/items/[id]/index.tsx`）
+- [x] 編集ページ（`app/routes/items/[id]/edit.tsx`）
+- [x] 削除確認モーダル/処理
+- [x] フォームバリデーション（サーバーサイド）
+- [ ] トースト通知コンポーネント（`app/components/ui/Toast.tsx`）→ 省略
 
 ### 変更対象
 - `app/components/ui/Input.tsx`（新規）
 - `app/components/ui/Select.tsx`（新規）
 - `app/components/ui/Textarea.tsx`（新規）
-- `app/components/ui/Toast.tsx`（新規）
 - `app/components/items/ItemForm.tsx`（新規）
 - `app/routes/items/new.tsx`（新規）
 - `app/routes/items/[id]/index.tsx`（新規）
 - `app/routes/items/[id]/edit.tsx`（新規）
 
 ### 完了条件
-- [ ] 新規作成が動作する
-- [ ] 詳細表示が動作する
-- [ ] 編集が動作する
-- [ ] 削除が動作する
-- [ ] バリデーションエラーが表示される
+- [x] 新規作成が動作する
+- [x] 詳細表示が動作する
+- [x] 編集が動作する
+- [x] 削除が動作する
+- [x] バリデーションエラーが表示される
 
 ### ユーザー確認項目
 - 全CRUD操作のブラウザ確認
