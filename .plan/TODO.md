@@ -4,7 +4,7 @@
 
 | フェーズ | 状態 |
 |---------|------|
-| Phase 0 | 未着手 |
+| Phase 0 | 完了 |
 | Phase 1 | 未着手 |
 | Phase 2 | 未着手 |
 | Phase 3 | 未着手 |
@@ -21,38 +21,38 @@ HonoXプロジェクトを初期化し、開発・テスト環境を整備する
 
 ### 作業内容
 
-- [ ] HonoXプロジェクト初期化（`npm create hono@latest`）
-- [ ] 依存パッケージインストール
-  - [ ] hono, honox
-  - [ ] zod（バリデーション）
-  - [ ] vitest, @cloudflare/vitest-pool-workers（テスト）
-  - [ ] tailwindcss, postcss, autoprefixer（スタイリング）
-  - [ ] wrangler（Cloudflare CLI）
-- [ ] 設定ファイル作成
-  - [ ] wrangler.toml（D1設定含む）
-  - [ ] vite.config.ts
-  - [ ] vitest.config.ts
-  - [ ] tailwind.config.js
-  - [ ] tsconfig.json調整
-- [ ] 基本ディレクトリ構造作成
-  - [ ] app/routes/
-  - [ ] app/components/
-  - [ ] app/db/
-  - [ ] app/middleware/
-  - [ ] app/lib/
-  - [ ] app/types/
-  - [ ] tests/
-  - [ ] migrations/
-- [ ] サンプルテスト作成（Vitest動作確認用）
-- [ ] package.json scriptsに dev, build, test 追加
+- [x] HonoXプロジェクト初期化（`npm create hono@latest`）
+- [x] 依存パッケージインストール
+  - [x] hono, honox
+  - [x] zod（バリデーション）
+  - [x] vitest, @cloudflare/vitest-pool-workers（テスト）
+  - [x] tailwindcss, postcss, autoprefixer（スタイリング）
+  - [x] wrangler（Cloudflare CLI）
+- [x] 設定ファイル作成
+  - [x] wrangler.toml（D1設定含む）
+  - [x] vite.config.ts
+  - [x] vitest.config.ts
+  - [x] tailwind.config.js
+  - [x] tsconfig.json調整
+- [x] 基本ディレクトリ構造作成
+  - [x] app/routes/
+  - [x] app/components/
+  - [x] app/db/
+  - [x] app/middleware/
+  - [x] app/lib/
+  - [x] app/types/
+  - [x] tests/
+  - [x] migrations/
+- [x] サンプルテスト作成（Vitest動作確認用）
+- [x] package.json scriptsに dev, build, test 追加
 
 ### 変更対象
 - 新規ファイル多数（プロジェクト全体の初期化）
 
 ### 完了条件
-- [ ] `npm run dev` でローカルサーバー起動
-- [ ] `npm run test` でテスト実行可能
-- [ ] Tailwind CSSが適用される
+- [x] `npm run dev` でローカルサーバー起動
+- [x] `npm run test` でテスト実行可能
+- [x] Tailwind CSSが適用される
 
 ### ユーザー確認項目
 - ローカル環境での動作確認
