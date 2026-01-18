@@ -1,6 +1,6 @@
 import type { Child } from 'hono/jsx'
 
-type ButtonVariant = 'primary' | 'secondary' | 'accent' | 'ghost'
+type ButtonVariant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonProps {
@@ -14,16 +14,17 @@ interface ButtonProps {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-opacity-90',
-  secondary: 'bg-secondary text-white hover:bg-opacity-90',
-  accent: 'bg-accent text-white hover:bg-opacity-90',
-  ghost: 'bg-transparent text-primary border border-primary hover:bg-primary hover:text-white',
+  primary: 'bg-primary text-white hover:bg-primary-dark active:bg-primary-dark shadow-sm hover:shadow-md',
+  secondary: 'bg-secondary text-white hover:bg-secondary-dark active:bg-secondary-dark shadow-sm hover:shadow-md',
+  accent: 'bg-accent text-primary-dark hover:bg-accent-dark hover:text-white active:bg-accent-dark shadow-sm hover:shadow-md',
+  ghost: 'bg-transparent text-primary border border-border hover:border-primary hover:bg-primary/5 active:bg-primary/10',
+  danger: 'bg-transparent text-accent-dark border border-accent-dark hover:bg-accent-dark hover:text-white active:bg-accent-dark',
 }
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-5 py-2.5 text-base',
+  lg: 'px-7 py-3.5 text-lg',
 }
 
 export function Button({
@@ -35,8 +36,17 @@ export function Button({
   class: className = '',
   disabled = false,
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded transition-all duration-200 focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:outline-none'
-  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'
+  const baseStyles = `
+    inline-flex items-center justify-center gap-2
+    font-medium tracking-wide rounded-xl
+    transition-all duration-250
+    focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2
+  `.trim().replace(/\s+/g, ' ')
+
+  const disabledStyles = disabled
+    ? 'opacity-50 cursor-not-allowed pointer-events-none'
+    : 'cursor-pointer'
+
   const combinedStyles = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${disabledStyles} ${className}`
 
   if (href && !disabled) {

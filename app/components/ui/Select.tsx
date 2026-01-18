@@ -30,20 +30,31 @@ export function Select({
   const errorId = `${selectId}-error`
   const hasError = !!error
 
-  const baseSelectStyles = 'w-full px-3 py-2 border rounded-lg bg-white text-text-main transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent appearance-none cursor-pointer'
+  const baseSelectStyles = `
+    w-full px-4 py-3 pr-10
+    bg-background border border-border rounded-xl
+    text-text-main
+    transition-all duration-250
+    focus:outline-none focus:bg-white focus:border-accent focus:shadow-input-focus
+    appearance-none cursor-pointer
+  `.trim().replace(/\s+/g, ' ')
+
   const errorStyles = hasError
-    ? 'border-red-500 focus:ring-red-500'
-    : 'border-gray-200 hover:border-secondary'
-  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed bg-gray-100' : ''
+    ? 'border-accent-dark focus:border-accent-dark'
+    : 'hover:border-secondary'
+
+  const disabledStyles = disabled
+    ? 'opacity-50 cursor-not-allowed bg-border-light'
+    : ''
 
   return (
-    <div class={`mb-4 ${className}`}>
+    <div class={`mb-5 ${className}`}>
       <label
         for={selectId}
-        class="block text-sm font-medium text-primary mb-1"
+        class="block text-sm font-medium text-primary mb-2 tracking-wide"
       >
         {label}
-        {required && <span class="text-red-500 ml-1">*</span>}
+        {required && <span class="text-accent-dark ml-1">*</span>}
       </label>
       <div class="relative">
         <select
@@ -54,29 +65,26 @@ export function Select({
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}
           class={`${baseSelectStyles} ${errorStyles} ${disabledStyles}`}
+          value={value || ''}
         >
           {placeholder && (
-            <option value="" disabled selected={!value}>
+            <option value="" disabled>
               {placeholder}
             </option>
           )}
           {options.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              selected={value === option.value}
-            >
+            <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </select>
-        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
           <i class="fa-solid fa-chevron-down text-secondary text-sm" aria-hidden="true"></i>
         </div>
       </div>
       {error && (
-        <p id={errorId} class="mt-1 text-sm text-red-500" role="alert">
-          <i class="fa-solid fa-exclamation-circle mr-1" aria-hidden="true"></i>
+        <p id={errorId} class="mt-2 text-sm text-accent-dark flex items-center" role="alert">
+          <i class="fa-solid fa-exclamation-triangle mr-2" aria-hidden="true"></i>
           {error}
         </p>
       )}

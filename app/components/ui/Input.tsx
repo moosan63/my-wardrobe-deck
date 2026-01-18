@@ -25,20 +25,30 @@ export function Input({
   const errorId = `${inputId}-error`
   const hasError = !!error
 
-  const baseInputStyles = 'w-full px-3 py-2 border rounded-lg bg-white text-text-main placeholder-secondary/50 transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent'
+  const baseInputStyles = `
+    w-full px-4 py-3
+    bg-background border border-border rounded-xl
+    text-text-main placeholder-secondary-light
+    transition-all duration-250
+    focus:outline-none focus:bg-white focus:border-accent focus:shadow-input-focus
+  `.trim().replace(/\s+/g, ' ')
+
   const errorStyles = hasError
-    ? 'border-red-500 focus:ring-red-500'
-    : 'border-gray-200 hover:border-secondary'
-  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed bg-gray-100' : ''
+    ? 'border-accent-dark focus:border-accent-dark'
+    : 'hover:border-secondary'
+
+  const disabledStyles = disabled
+    ? 'opacity-50 cursor-not-allowed bg-border-light'
+    : ''
 
   return (
-    <div class={`mb-4 ${className}`}>
+    <div class={`mb-5 ${className}`}>
       <label
         for={inputId}
-        class="block text-sm font-medium text-primary mb-1"
+        class="block text-sm font-medium text-primary mb-2 tracking-wide"
       >
         {label}
-        {required && <span class="text-red-500 ml-1">*</span>}
+        {required && <span class="text-accent-dark ml-1">*</span>}
       </label>
       <input
         type={type}
@@ -53,8 +63,8 @@ export function Input({
         class={`${baseInputStyles} ${errorStyles} ${disabledStyles}`}
       />
       {error && (
-        <p id={errorId} class="mt-1 text-sm text-red-500" role="alert">
-          <i class="fa-solid fa-exclamation-circle mr-1" aria-hidden="true"></i>
+        <p id={errorId} class="mt-2 text-sm text-accent-dark flex items-center" role="alert">
+          <i class="fa-solid fa-exclamation-triangle mr-2" aria-hidden="true"></i>
           {error}
         </p>
       )}
