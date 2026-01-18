@@ -140,37 +140,45 @@ export default createRoute(async (c) => {
 
   return c.render(
     <Layout>
-      <div class="container mx-auto px-4 py-8">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
         {/* Page Header */}
-        <div class="mb-8">
-          <nav class="text-sm text-secondary mb-2">
-            <a href="/" class="hover:text-accent transition-colors">ホーム</a>
-            <span class="mx-2">/</span>
-            <a href={`/items/${id}`} class="hover:text-accent transition-colors">
+        <div class="mb-8 md:mb-10">
+          <nav class="text-sm text-secondary mb-4">
+            <a href="/" class="hover:text-accent transition-colors duration-250">ホーム</a>
+            <span class="mx-2 text-border">/</span>
+            <a href={`/items/${id}`} class="hover:text-accent transition-colors duration-250">
               {existingItem.name}
             </a>
-            <span class="mx-2">/</span>
-            <span class="text-primary">編集</span>
+            <span class="mx-2 text-border">/</span>
+            <span class="text-primary font-medium">編集</span>
           </nav>
-          <h1 class="text-2xl md:text-3xl font-bold text-primary">
-            <i class="fa-solid fa-edit text-accent mr-3" aria-hidden="true"></i>
-            アイテムを編集
-          </h1>
-          <p class="text-secondary mt-2">
-            アイテム情報を変更します
-          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
+              <i class="fa-solid fa-edit text-accent text-xl" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold text-primary tracking-wide">
+                アイテムを編集
+              </h1>
+              <p class="text-secondary text-sm mt-1">
+                アイテム情報を変更します
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Form */}
-        <div class="bg-card-bg rounded-lg shadow-sm p-6">
-          <ItemForm
-            item={displayItem}
-            action={`/items/${id}/edit`}
-            method="PUT"
-            cancelUrl={`/items/${id}`}
-            submitLabel="更新"
-            errors={errors}
-          />
+        <div class="max-w-2xl">
+          <div class="bg-card-bg rounded-2xl shadow-card border border-border-light p-6 md:p-8">
+            <ItemForm
+              item={displayItem}
+              action={`/items/${id}/edit`}
+              method="PUT"
+              cancelUrl={`/items/${id}`}
+              submitLabel="更新"
+              errors={errors}
+            />
+          </div>
         </div>
       </div>
     </Layout>

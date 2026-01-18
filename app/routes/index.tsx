@@ -37,24 +37,29 @@ export default createRoute(async (c) => {
 
   return c.render(
     <Layout>
-      <div class="container mx-auto px-4 py-8">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
         {/* Hero Section */}
-        <div class="mb-8">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div class="mb-10 md:mb-14">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-              <h1 class="text-2xl md:text-3xl font-bold text-primary mb-2">
-                ワードローブ
-              </h1>
-              <p class="text-secondary">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
+                  <i class="fa-solid fa-vest text-accent text-xl" aria-hidden="true"></i>
+                </div>
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-primary tracking-wide">
+                  ワードローブ
+                </h1>
+              </div>
+              <p class="text-secondary text-sm md:text-base">
                 あなたのアイテムを一覧で管理
-                <span class="ml-2 text-accent font-medium">
+                <span class="ml-3 px-3 py-1 bg-accent/10 text-accent font-medium rounded-full text-sm">
                   {totalItems}点
                 </span>
               </p>
             </div>
-            <div class="mt-4 md:mt-0">
+            <div>
               <Button variant="accent" size="lg" href="/items/new">
-                <i class="fa-solid fa-plus mr-2"></i>
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
                 アイテムを追加
               </Button>
             </div>
@@ -63,24 +68,24 @@ export default createRoute(async (c) => {
 
         {/* Error Message */}
         {error && (
-          <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-            <i class="fa-solid fa-exclamation-circle mr-2"></i>
+          <div class="mb-8 p-5 bg-accent/5 border border-accent/20 rounded-2xl text-accent-dark">
+            <i class="fa-solid fa-exclamation-triangle mr-2" aria-hidden="true"></i>
             {error}
           </div>
         )}
 
         {/* Empty State */}
         {!error && totalItems === 0 && (
-          <div class="text-center py-16">
-            <i class="fa-solid fa-shirt text-6xl text-secondary/30 mb-4"></i>
-            <h2 class="text-xl font-medium text-primary mb-2">
+          <div class="text-center py-20 bg-background/50 rounded-2xl border border-border-light">
+            <i class="fa-solid fa-shirt text-7xl text-secondary/20 mb-6" aria-hidden="true"></i>
+            <h2 class="text-xl md:text-2xl font-bold text-primary mb-3 tracking-wide">
               アイテムがありません
             </h2>
-            <p class="text-secondary mb-6">
+            <p class="text-secondary mb-8 text-sm md:text-base">
               最初のアイテムを追加して、ワードローブの管理を始めましょう
             </p>
-            <Button variant="accent" href="/items/new">
-              <i class="fa-solid fa-plus mr-2"></i>
+            <Button variant="accent" size="lg" href="/items/new">
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
               最初のアイテムを追加
             </Button>
           </div>

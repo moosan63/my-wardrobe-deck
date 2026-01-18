@@ -124,15 +124,15 @@ export default createRoute(async (c) => {
 
   return c.render(
     <Layout>
-      <div class="container mx-auto px-4 py-8">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
         {/* Breadcrumb */}
         <nav class="text-sm text-secondary mb-6">
-          <a href="/" class="hover:text-accent transition-colors">ホーム</a>
-          <span class="mx-2">/</span>
-          <span class="text-primary">{item.name}</span>
+          <a href="/" class="hover:text-accent transition-colors duration-250">ホーム</a>
+          <span class="mx-2 text-border">/</span>
+          <span class="text-primary font-medium">{item.name}</span>
         </nav>
 
-        <div class="grid md:grid-cols-2 gap-8">
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
           {/* Color Display Card */}
           <Card class="overflow-hidden">
             <div
@@ -140,11 +140,11 @@ export default createRoute(async (c) => {
               style={`background-color: ${bgColor}`}
             >
               <i
-                class={`fa-solid ${iconClass} text-8xl md:text-9xl opacity-30`}
+                class={`fa-solid ${iconClass} text-8xl md:text-9xl opacity-20`}
                 style={`color: ${textColor}`}
                 aria-hidden="true"
               ></i>
-              <span class="absolute top-4 left-4 px-3 py-1.5 text-sm font-medium rounded-full bg-white/90 text-primary">
+              <span class="absolute top-4 left-4 px-4 py-2 text-sm font-medium rounded-xl bg-white/95 text-primary shadow-sm backdrop-blur-sm">
                 {CATEGORY_LABELS[item.category]}
               </span>
             </div>
@@ -152,26 +152,26 @@ export default createRoute(async (c) => {
 
           {/* Item Details */}
           <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-primary mb-4">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-6 tracking-wide">
               {item.name}
             </h1>
 
-            <div class="space-y-4 mb-8">
+            <div class="space-y-5 mb-10">
               {/* Category */}
-              <div class="flex items-center">
-                <span class="w-24 text-secondary text-sm">カテゴリ</span>
-                <span class="flex items-center text-primary">
+              <div class="flex items-center py-3 border-b border-border-light">
+                <span class="w-28 text-secondary text-sm">カテゴリ</span>
+                <span class="flex items-center text-primary font-medium">
                   <i class={`fa-solid ${iconClass} mr-2 text-accent`} aria-hidden="true"></i>
                   {CATEGORY_LABELS[item.category]}
                 </span>
               </div>
 
               {/* Color */}
-              <div class="flex items-center">
-                <span class="w-24 text-secondary text-sm">色</span>
-                <span class="flex items-center text-primary">
+              <div class="flex items-center py-3 border-b border-border-light">
+                <span class="w-28 text-secondary text-sm">色</span>
+                <span class="flex items-center text-primary font-medium">
                   <span
-                    class="w-4 h-4 rounded-full mr-2 border border-gray-200"
+                    class="w-5 h-5 rounded-full mr-2 border border-border shadow-sm"
                     style={`background-color: ${bgColor}`}
                   ></span>
                   {item.color}
@@ -180,30 +180,30 @@ export default createRoute(async (c) => {
 
               {/* Brand */}
               {item.brand && (
-                <div class="flex items-center">
-                  <span class="w-24 text-secondary text-sm">ブランド</span>
-                  <span class="text-primary">{item.brand}</span>
+                <div class="flex items-center py-3 border-b border-border-light">
+                  <span class="w-28 text-secondary text-sm">ブランド</span>
+                  <span class="text-primary font-medium">{item.brand}</span>
                 </div>
               )}
 
               {/* Description */}
               {item.description && (
-                <div>
-                  <span class="block text-secondary text-sm mb-1">説明・メモ</span>
-                  <p class="text-primary bg-background rounded-lg p-3 whitespace-pre-wrap">
+                <div class="py-3">
+                  <span class="block text-secondary text-sm mb-2">説明・メモ</span>
+                  <p class="text-primary bg-background rounded-xl p-4 whitespace-pre-wrap text-sm leading-relaxed">
                     {item.description}
                   </p>
                 </div>
               )}
 
               {/* Timestamps */}
-              <div class="pt-4 border-t border-gray-200 text-sm text-secondary">
-                <div class="flex items-center mb-1">
-                  <i class="fa-solid fa-clock mr-2" aria-hidden="true"></i>
+              <div class="pt-4 text-sm text-secondary-light">
+                <div class="flex items-center mb-2">
+                  <i class="fa-solid fa-clock mr-2 w-4 text-center" aria-hidden="true"></i>
                   作成: {new Date(item.created_at).toLocaleDateString('ja-JP')}
                 </div>
                 <div class="flex items-center">
-                  <i class="fa-solid fa-pen mr-2" aria-hidden="true"></i>
+                  <i class="fa-solid fa-pen mr-2 w-4 text-center" aria-hidden="true"></i>
                   更新: {new Date(item.updated_at).toLocaleDateString('ja-JP')}
                 </div>
               </div>
@@ -212,11 +212,11 @@ export default createRoute(async (c) => {
             {/* Action Buttons */}
             <div class="flex flex-wrap gap-3">
               <Button variant="ghost" href="/">
-                <i class="fa-solid fa-arrow-left mr-2" aria-hidden="true"></i>
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
                 一覧に戻る
               </Button>
               <Button variant="primary" href={`/items/${item.id}/edit`}>
-                <i class="fa-solid fa-edit mr-2" aria-hidden="true"></i>
+                <i class="fa-solid fa-edit" aria-hidden="true"></i>
                 編集
               </Button>
               {/* Delete Form */}
@@ -228,19 +228,15 @@ export default createRoute(async (c) => {
               >
                 <input type="hidden" name="_method" value="DELETE" />
                 <input type="hidden" name="action" value="delete" />
-                <Button
-                  type="submit"
-                  variant="ghost"
-                  class="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
-                >
-                  <i class="fa-solid fa-trash mr-2" aria-hidden="true"></i>
+                <Button type="submit" variant="danger">
+                  <i class="fa-solid fa-trash" aria-hidden="true"></i>
                   削除
                 </Button>
               </form>
             </div>
 
             {/* Delete Confirmation Note */}
-            <p class="mt-4 text-xs text-secondary">
+            <p class="mt-4 text-xs text-secondary-light">
               <i class="fa-solid fa-info-circle mr-1" aria-hidden="true"></i>
               削除すると元に戻すことはできません
             </p>

@@ -65,42 +65,50 @@ export default createRoute(async (c) => {
   // フォーム表示（GET または エラー時の再表示）
   return c.render(
     <Layout>
-      <div class="container mx-auto px-4 py-8">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
         {/* Page Header */}
-        <div class="mb-8">
-          <nav class="text-sm text-secondary mb-2">
-            <a href="/" class="hover:text-accent transition-colors">ホーム</a>
-            <span class="mx-2">/</span>
-            <span class="text-primary">新規追加</span>
+        <div class="mb-8 md:mb-10">
+          <nav class="text-sm text-secondary mb-4">
+            <a href="/" class="hover:text-accent transition-colors duration-250">ホーム</a>
+            <span class="mx-2 text-border">/</span>
+            <span class="text-primary font-medium">新規追加</span>
           </nav>
-          <h1 class="text-2xl md:text-3xl font-bold text-primary">
-            <i class="fa-solid fa-plus text-accent mr-3" aria-hidden="true"></i>
-            アイテムを追加
-          </h1>
-          <p class="text-secondary mt-2">
-            新しいアイテムをワードローブに追加します
-          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center">
+              <i class="fa-solid fa-plus text-accent text-xl" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold text-primary tracking-wide">
+                アイテムを追加
+              </h1>
+              <p class="text-secondary text-sm mt-1">
+                新しいアイテムをワードローブに追加します
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Form */}
-        <div class="bg-card-bg rounded-lg shadow-sm p-6">
-          <ItemForm
-            action="/items/new"
-            method="POST"
-            cancelUrl="/"
-            submitLabel="追加"
-            errors={errors}
-            item={formData.name ? {
-              id: 0,
-              name: formData.name,
-              category: formData.category as Category,
-              color: formData.color,
-              brand: formData.brand || null,
-              description: formData.description || null,
-              created_at: '',
-              updated_at: '',
-            } : undefined}
-          />
+        <div class="max-w-2xl">
+          <div class="bg-card-bg rounded-2xl shadow-card border border-border-light p-6 md:p-8">
+            <ItemForm
+              action="/items/new"
+              method="POST"
+              cancelUrl="/"
+              submitLabel="追加"
+              errors={errors}
+              item={formData.name ? {
+                id: 0,
+                name: formData.name,
+                category: formData.category as Category,
+                color: formData.color,
+                brand: formData.brand || null,
+                description: formData.description || null,
+                created_at: '',
+                updated_at: '',
+              } : undefined}
+            />
+          </div>
         </div>
       </div>
     </Layout>
