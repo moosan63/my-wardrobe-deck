@@ -64,7 +64,7 @@ export function ItemForm({
   ]
 
   return (
-    <form action={action} method="post" class="max-w-lg">
+    <form action={action} method="post">
       {/* HonoXでPUT/DELETEを使うためのhidden field */}
       {method !== 'POST' && (
         <input type="hidden" name="_method" value={method} />
@@ -72,8 +72,8 @@ export function ItemForm({
 
       {/* General Error */}
       {errors.general && (
-        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-          <i class="fa-solid fa-exclamation-circle mr-2" aria-hidden="true"></i>
+        <div class="mb-6 p-4 bg-accent/5 border border-accent/20 rounded-xl text-accent-dark flex items-center">
+          <i class="fa-solid fa-exclamation-triangle mr-3" aria-hidden="true"></i>
           {errors.general}
         </div>
       )}
@@ -130,13 +130,13 @@ export function ItemForm({
       />
 
       {/* Action Buttons */}
-      <div class="flex items-center justify-end space-x-3 mt-6 pt-6 border-t border-gray-200">
+      <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-border-light">
         <Button variant="ghost" href={cancelUrl}>
-          <i class="fa-solid fa-times mr-2" aria-hidden="true"></i>
+          <i class="fa-solid fa-times" aria-hidden="true"></i>
           キャンセル
         </Button>
         <Button type="submit" variant="accent">
-          <i class="fa-solid fa-check mr-2" aria-hidden="true"></i>
+          <i class="fa-solid fa-check" aria-hidden="true"></i>
           {submitLabel}
         </Button>
       </div>

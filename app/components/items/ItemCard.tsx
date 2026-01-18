@@ -7,12 +7,9 @@ interface ItemCardProps {
 }
 
 /**
- * 色名からTailwindのbg-*クラスを生成
- * 基本的な色名に対応。不明な色はグレー背景を使用
+ * 色名からHEXカラーコードを取得
  */
 function getColorStyle(color: string): string {
-  // CSSカラー名またはHEXコードの場合はインラインスタイルで対応
-  // Tailwindで対応できる基本色のマッピング
   const colorMap: Record<string, string> = {
     // 日本語色名
     '黒': '#1a1a1a',
@@ -49,17 +46,14 @@ function getColorStyle(color: string): string {
 
   const normalizedColor = color.toLowerCase().trim()
 
-  // マッピングにある色名
   if (colorMap[normalizedColor]) {
     return colorMap[normalizedColor]
   }
 
-  // HEXコードの場合（検証付き）
   if (normalizedColor.startsWith('#') && /^#[0-9a-f]{3,6}$/i.test(normalizedColor)) {
     return normalizedColor
   }
 
-  // その他はデフォルトグレー
   return '#9ca3af'
 }
 
@@ -67,7 +61,6 @@ function getColorStyle(color: string): string {
  * 背景色に応じたテキスト色を決定（コントラスト確保）
  */
 function getTextColorForBg(bgColor: string): string {
-  // 簡易的な明度判定（HEXの場合）
   if (bgColor.startsWith('#')) {
     const hex = bgColor.slice(1)
     const r = parseInt(hex.slice(0, 2), 16)
@@ -92,32 +85,32 @@ export function ItemCard({ item }: ItemCardProps) {
         style={`background-color: ${bgColor}`}
       >
         <i
-          class={`fa-solid ${iconClass} text-5xl md:text-6xl opacity-30 group-hover:opacity-40 transition-opacity`}
+          class={`fa-solid ${iconClass} text-5xl md:text-6xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-300`}
           style={`color: ${textColor}`}
           aria-hidden="true"
         ></i>
 
         {/* Category Badge */}
-        <span class="absolute top-2 left-2 px-2 py-1 text-xs font-medium rounded bg-white/90 text-primary">
+        <span class="absolute top-2.5 left-2.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-white/95 text-primary shadow-sm backdrop-blur-sm">
           {CATEGORY_LABELS[item.category]}
         </span>
       </div>
 
       {/* Item Info */}
-      <div class="p-3">
-        <h3 class="font-medium text-text-main truncate group-hover:text-accent transition-colors">
+      <div class="p-4">
+        <h3 class="font-medium text-text-main truncate group-hover:text-accent transition-colors duration-250 tracking-wide">
           {item.name}
         </h3>
-        <div class="mt-1 flex items-center justify-between text-sm text-secondary">
+        <div class="mt-2 flex items-center justify-between text-sm text-secondary">
           <span class="flex items-center">
             <span
-              class="w-3 h-3 rounded-full mr-1.5 border border-gray-200"
+              class="w-3.5 h-3.5 rounded-full mr-2 border border-border shadow-sm"
               style={`background-color: ${bgColor}`}
             ></span>
-            {item.color}
+            <span class="text-xs">{item.color}</span>
           </span>
           {item.brand && (
-            <span class="truncate ml-2 text-xs">{item.brand}</span>
+            <span class="truncate ml-2 text-xs text-secondary-light">{item.brand}</span>
           )}
         </div>
       </div>
