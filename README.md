@@ -37,10 +37,10 @@
 npm install
 
 # D1データベースの作成（初回のみ）
-npx wrangler d1 create my-wardrobe-db
+npx wrangler d1 create my-wardrobe-deck-db
 
 # マイグレーション実行（ローカル）
-npx wrangler d1 execute my-wardrobe-db --local --file=migrations/0001_create_items.sql
+npx wrangler d1 execute my-wardrobe-deck-db --local --file=migrations/0001_create_items.sql
 ```
 
 ## 開発
@@ -99,7 +99,7 @@ my-wardrobe-deck/
 
 ```bash
 # 本番D1データベースにマイグレーション実行
-npx wrangler d1 execute my-wardrobe-db --file=migrations/0001_create_items.sql
+npx wrangler d1 execute my-wardrobe-deck-db --file=migrations/0001_create_items.sql
 
 # Cloudflare Pagesにデプロイ
 npm run deploy
