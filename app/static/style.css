@@ -1,6 +1,41 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss' source('../../app');
+
+@theme {
+  /* Primary colors */
+  --color-primary: #2D3748;
+  --color-primary-light: #4A5568;
+  --color-primary-dark: #1A202C;
+
+  /* Secondary colors */
+  --color-secondary: #718096;
+  --color-secondary-light: #A0AEC0;
+  --color-secondary-dark: #4A5568;
+
+  /* Accent colors */
+  --color-accent: #C4A35A;
+  --color-accent-light: #D4B96A;
+  --color-accent-dark: #A88B4A;
+
+  /* Background colors */
+  --color-background: #F7FAFC;
+  --color-card-bg: #FFFFFF;
+
+  /* Text colors */
+  --color-text-main: #1A202C;
+
+  /* Border colors */
+  --color-border: #E2E8F0;
+  --color-border-light: #EDF2F7;
+
+  /* Shadows */
+  --shadow-elegant: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 2px 8px -1px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-input-focus: 0 0 0 3px rgba(196, 163, 90, 0.2);
+
+  /* Font family */
+  --font-sans: "Noto Sans JP", "游ゴシック", YuGothic, sans-serif;
+}
 
 @layer base {
   html {

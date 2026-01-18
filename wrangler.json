@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "my-wardrobe-deck",
+  "main": "./dist/index.js",
+  "compatibility_date": "2024-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "my-wardrobe-deck-db",
+      "database_id": "local"
+    }
+  ]
+}

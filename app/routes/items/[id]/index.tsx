@@ -43,32 +43,11 @@ function getTextColor(bgColor: string): string {
   return '#ffffff'
 }
 
+// GET: アイテム詳細表示
 export default createRoute(async (c) => {
   const db = c.env.DB
   const idParam = c.req.param('id') ?? ''
   const id = parseInt(idParam, 10)
-
-  // POST処理（削除）
-  if (c.req.method === 'POST') {
-    const body = await c.req.parseBody()
-    const method = body._method
-
-    if (method === 'DELETE') {
-      // 削除確認のactionパラメータをチェック
-      const action = body.action as string
-
-      if (action === 'delete') {
-        try {
-          const deleted = await deleteItem(db, id)
-          if (deleted) {
-            return c.redirect('/', 302)
-          }
-        } catch (e) {
-          console.error('Failed to delete item:', e)
-        }
-      }
-    }
-  }
 
   // IDバリデーション
   if (isNaN(id) || id <= 0) {
@@ -221,13 +200,11 @@ export default createRoute(async (c) => {
               </Button>
               {/* Delete Form */}
               <form
-                action={`/items/${item.id}`}
+                action={`/items/${item.id}/delete`}
                 method="post"
                 class="inline-block"
                 onsubmit="return confirm('本当に削除しますか？この操作は取り消せません。')"
               >
-                <input type="hidden" name="_method" value="DELETE" />
-                <input type="hidden" name="action" value="delete" />
                 <Button type="submit" variant="danger">
                   <i class="fa-solid fa-trash" aria-hidden="true"></i>
                   削除

@@ -19,9 +19,9 @@ export default jsxRenderer(({ children, title }) => {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
-        <link href="/static/style.css" rel="stylesheet" />
+        <Link href="/app/static/style.css" rel="stylesheet" />
+        <Script src="/app/client.ts" />
         <Style />
-        <script type="module" src="/static/client.js"></script>
       </head>
       <body class="bg-background text-text-main font-sans">
         {children}

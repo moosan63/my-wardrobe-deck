@@ -1,39 +1,18 @@
 import { defineConfig } from 'vite'
 import honox from 'honox/vite'
-import pages from '@hono/vite-cloudflare-pages'
-import devServer from '@hono/vite-dev-server'
+import build from '@hono/vite-build/cloudflare-workers'
 import adapter from '@hono/vite-dev-server/cloudflare'
+import tailwindcss from '@tailwindcss/vite'
 
-export default defineConfig(({ mode }) => {
-  if (mode === 'client') {
-    return {
-      build: {
-        manifest: true,
-        rollupOptions: {
-          input: ['./app/client.ts', './app/static/style.css'],
-          output: {
-            entryFileNames: 'static/[name].js',
-            assetFileNames: 'static/[name].[ext]'
-          }
-        },
-        outDir: './dist',
-        emptyOutDir: false
+export default defineConfig({
+  plugins: [
+    honox({
+      devServer: { adapter },
+      client: {
+        input: ['/app/client.ts', '/app/static/style.css']
       }
-    }
-  }
-  return {
-    plugins: [
-      honox(),
-      pages(),
-      devServer({
-        adapter,
-        entry: 'app/server.ts'
-      })
-    ],
-    resolve: {
-      alias: {
-        '@': '/app'
-      }
-    }
-  }
+    }),
+    tailwindcss(),
+    build()
+  ]
 })
