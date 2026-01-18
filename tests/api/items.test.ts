@@ -1,13 +1,21 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { env } from 'cloudflare:test'
 import { Hono } from 'hono'
-import itemsIndex from '../../app/routes/api/items/index'
-import itemsId from '../../app/routes/api/items/[id]'
+import {
+  getItemsHandler,
+  postItemsHandler,
+  getItemHandler,
+  putItemHandler,
+  deleteItemHandler,
+} from '../../app/lib/items-handlers'
 
 // テスト用にHonoアプリを構築
-const app = new Hono()
-app.route('/api/items', itemsIndex)
-app.route('/api/items/:id', itemsId)
+const app = new Hono<{ Bindings: { DB: D1Database } }>()
+app.get('/api/items', getItemsHandler)
+app.post('/api/items', postItemsHandler)
+app.get('/api/items/:id', getItemHandler)
+app.put('/api/items/:id', putItemHandler)
+app.delete('/api/items/:id', deleteItemHandler)
 
 // テスト用のスキーマをセットアップ
 async function setupSchema(db: D1Database) {

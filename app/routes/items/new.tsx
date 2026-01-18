@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+import { createRoute } from 'honox/factory'
 import { Layout } from '../../components/layout/Layout'
 import { ItemForm } from '../../components/items/ItemForm'
 import { createItem } from '../../db/items'
@@ -14,10 +14,8 @@ interface FormErrors {
   general?: string
 }
 
-const app = new Hono()
-
 // GET: フォーム表示
-app.get('/', (c) => {
+export default createRoute((c) => {
   return c.render(
     <Layout>
       <div class="container mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
@@ -60,7 +58,7 @@ app.get('/', (c) => {
 })
 
 // POST: フォーム送信処理
-app.post('/', async (c) => {
+export const POST = createRoute(async (c) => {
   const db = c.env.DB
   const body = await c.req.parseBody()
   let errors: FormErrors = {}
@@ -155,5 +153,3 @@ app.post('/', async (c) => {
     </Layout>
   )
 })
-
-export default app
