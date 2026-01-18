@@ -1,13 +1,14 @@
 import { defineConfig } from 'vite'
 import honox from 'honox/vite'
 import pages from '@hono/vite-cloudflare-pages'
-import devServer, { defaultOptions } from '@hono/vite-dev-server'
+import devServer from '@hono/vite-dev-server'
 import adapter from '@hono/vite-dev-server/cloudflare'
 
 export default defineConfig(({ mode }) => {
   if (mode === 'client') {
     return {
       build: {
+        manifest: true,
         rollupOptions: {
           input: ['./app/client.ts', './app/static/style.css'],
           output: {
