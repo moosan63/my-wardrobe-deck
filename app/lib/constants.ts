@@ -1,9 +1,9 @@
-import type { Category } from '../types/item'
+import type { CategoryValue } from '../src/item/domain'
 
 /**
  * 利用可能なカテゴリ一覧
  */
-export const CATEGORIES: readonly Category[] = [
+export const CATEGORIES: readonly CategoryValue[] = [
   'outer',
   'tops',
   'bottoms',
@@ -14,7 +14,7 @@ export const CATEGORIES: readonly Category[] = [
 /**
  * カテゴリの日本語表示名マッピング
  */
-export const CATEGORY_LABELS: Record<Category, string> = {
+export const CATEGORY_LABELS: Record<CategoryValue, string> = {
   outer: 'アウター',
   tops: 'トップス',
   bottoms: 'ボトムス',
@@ -25,7 +25,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 /**
  * カテゴリのFont Awesomeアイコンクラス
  */
-export const CATEGORY_ICONS: Record<Category, string> = {
+export const CATEGORY_ICONS: Record<CategoryValue, string> = {
   outer: 'fa-vest',
   tops: 'fa-shirt',
   bottoms: 'fa-person',
@@ -36,6 +36,6 @@ export const CATEGORY_ICONS: Record<Category, string> = {
 /**
  * カテゴリが有効かどうかを判定
  */
-export function isValidCategory(value: string): value is Category {
-  return CATEGORIES.includes(value as Category)
+export function isValidCategory(value: string): value is CategoryValue {
+  return CATEGORIES.includes(value as CategoryValue)
 }

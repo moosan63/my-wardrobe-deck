@@ -20,9 +20,10 @@
 | ランタイム | [Cloudflare Workers](https://workers.cloudflare.com/) |
 | データベース | [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite) |
 | スタイリング | [Tailwind CSS](https://tailwindcss.com/) |
-| バリデーション | [Zod](https://zod.dev/) |
+| エラーハンドリング | [Neverthrow](https://github.com/supermacro/neverthrow) |
 | テスト | [Vitest](https://vitest.dev/) |
 | 言語 | TypeScript |
+| アーキテクチャ | DDD / CQRS |
 
 ## 必要要件
 
@@ -74,13 +75,41 @@ my-wardrobe-deck/
 │   │   ├── ui/           # Button, Card, Input等
 │   │   ├── layout/       # Header, Footer
 │   │   └── items/        # ItemCard, ItemForm等
-│   ├── db/               # D1データベースアクセス層
-│   ├── lib/              # 定数・バリデーション
-│   └── types/            # 型定義
+│   ├── src/              # ドメイン・アプリケーション層（DDD）
+│   │   └── item/         # Item集約
+│   │       ├── domain/   # エンティティ・値オブジェクト
+│   │       │   ├── write/  # Write Model（Item, 値オブジェクト）
+│   │       │   └── read/   # Read Model（DTO）
+│   │       ├── usecases/ # アプリケーションロジック
+│   │       └── repositories/ # リポジトリインターフェース
+│   ├── infrastructure/   # インフラストラクチャ層
+│   │   └── d1/           # D1リポジトリ実装
+│   ├── shared/           # 共有モジュール（Result型・エラー）
+│   └── lib/              # 定数・APIレスポンス
 ├── tests/                # テストファイル
+│   ├── unit/             # 単体テスト
+│   ├── integration/      # 統合テスト
+│   └── api/              # APIテスト
 ├── migrations/           # D1マイグレーション
 └── .plan/                # 設計ドキュメント・開発ログ
 ```
+
+## アーキテクチャ
+
+本プロジェクトはDDD（ドメイン駆動設計）とCQRS（コマンド・クエリ責務分離）パターンを採用しています。
+
+### 層構造
+
+| 層 | ディレクトリ | 責務 |
+|---|-------------|------|
+| プレゼンテーション | `app/routes/`, `app/components/` | UI・API |
+| アプリケーション | `app/src/item/usecases/` | ユースケース |
+| ドメイン | `app/src/item/domain/` | ビジネスロジック |
+| インフラストラクチャ | `app/infrastructure/` | D1実装 |
+
+### エラーハンドリング
+
+[Neverthrow](https://github.com/supermacro/neverthrow)のResult型を使用し、例外を使わない型安全なエラーハンドリングを実現しています。
 
 ## API
 
@@ -107,6 +136,7 @@ npm run deploy
 
 ## 開発ステータス
 
+### 機能開発
 - [x] Phase 0: 環境セットアップ
 - [x] Phase 1: データベース・モデル層
 - [x] Phase 2: API/バックエンド
@@ -114,6 +144,15 @@ npm run deploy
 - [x] Phase 4: フロントエンド（CRUD画面）
 - [ ] Phase 5: 簡易認証
 - [ ] Phase 6: 最終調整・デプロイ
+
+### DDD/CQRSリファクタリング
+- [x] Phase 0: 準備（Neverthrow導入、共有モジュール）
+- [x] Phase 1: ドメイン層構築（エンティティ、値オブジェクト）
+- [x] Phase 2: リポジトリ層構築（インターフェース、D1実装）
+- [x] Phase 3: ユースケース層構築（CRUD操作）
+- [x] Phase 4: ハンドラ層移行（APIエンドポイント）
+- [x] Phase 5: SSRページ移行
+- [x] Phase 6: クリーンアップ
 
 詳細な設計・進捗は `.plan/` ディレクトリを参照してください。
 

@@ -1,4 +1,4 @@
-import type { Item, Category } from '../../types/item'
+import type { ItemReadModel } from '../../src/item/domain'
 import { CATEGORIES, CATEGORY_LABELS } from '../../lib/constants'
 import { Input } from '../ui/Input'
 import { Select } from '../ui/Select'
@@ -16,7 +16,7 @@ interface FormErrors {
 
 interface ItemFormProps {
   /** 編集時は既存のアイテムデータを渡す */
-  item?: Item
+  item?: ItemReadModel
   /** バリデーションエラー */
   errors?: FormErrors
   /** 送信先URL */

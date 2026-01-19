@@ -1,9 +1,9 @@
-import type { Item } from '../../types/item'
+import type { ItemReadModel } from '../../src/item/domain'
 import { CATEGORY_ICONS, CATEGORY_LABELS } from '../../lib/constants'
 import { Card } from '../ui/Card'
 
 interface ItemCardProps {
-  item: Item
+  item: ItemReadModel
 }
 
 /**

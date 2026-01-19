@@ -1,10 +1,10 @@
-import type { Item, Category } from '../../types/item'
+import type { ItemReadModel, CategoryValue } from '../../src/item/domain'
 import { CATEGORY_ICONS, CATEGORY_LABELS } from '../../lib/constants'
 import { ItemCard } from './ItemCard'
 
 interface CategorySectionProps {
-  category: Category
-  items: Item[]
+  category: CategoryValue
+  items: ItemReadModel[]
 }
 
 export function CategorySection({ category, items }: CategorySectionProps) {
