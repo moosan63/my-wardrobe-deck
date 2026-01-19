@@ -2,7 +2,8 @@ import { createRoute } from 'honox/factory'
 import { Layout } from '../../../components/layout/Layout'
 import { Button } from '../../../components/ui/Button'
 import { Card } from '../../../components/ui/Card'
-import { getItemById, deleteItem } from '../../../db/items'
+import { GetItem, type CategoryValue } from '../../../src/item'
+import { D1ItemReadRepository } from '../../../infrastructure/d1/item-read-repository-impl'
 import { CATEGORY_LABELS, CATEGORY_ICONS } from '../../../lib/constants'
 
 /**
@@ -49,33 +50,40 @@ export default createRoute(async (c) => {
   const idParam = c.req.param('id') ?? ''
   const id = parseInt(idParam, 10)
 
-  // IDバリデーション
-  if (isNaN(id) || id <= 0) {
-    return c.render(
-      <Layout>
-        <div class="container mx-auto px-4 py-8">
-          <div class="text-center py-16">
-            <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500/50 mb-4"></i>
-            <h2 class="text-xl font-medium text-primary mb-2">
-              無効なIDです
-            </h2>
-            <p class="text-secondary mb-6">
-              指定されたIDは有効ではありません
-            </p>
-            <Button variant="primary" href="/">
-              <i class="fa-solid fa-home mr-2"></i>
-              ホームに戻る
-            </Button>
+  // リポジトリとユースケースのインスタンス化
+  const itemReadRepository = new D1ItemReadRepository(db)
+  const getItem = new GetItem(itemReadRepository)
+
+  // ユースケースを実行してアイテムを取得
+  const result = await getItem.execute(id)
+
+  if (result.isErr()) {
+    const error = result.error
+
+    // IDバリデーションエラー
+    if (error.type === 'INVALID_ITEM_ID') {
+      return c.render(
+        <Layout>
+          <div class="container mx-auto px-4 py-8">
+            <div class="text-center py-16">
+              <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500/50 mb-4"></i>
+              <h2 class="text-xl font-medium text-primary mb-2">
+                無効なIDです
+              </h2>
+              <p class="text-secondary mb-6">
+                指定されたIDは有効ではありません
+              </p>
+              <Button variant="primary" href="/">
+                <i class="fa-solid fa-home mr-2"></i>
+                ホームに戻る
+              </Button>
+            </div>
           </div>
-        </div>
-      </Layout>
-    )
-  }
+        </Layout>
+      )
+    }
 
-  // アイテム取得
-  const item = await getItemById(db, id)
-
-  if (!item) {
+    // アイテムが見つからない、またはその他のエラー
     return c.render(
       <Layout>
         <div class="container mx-auto px-4 py-8">
@@ -97,9 +105,10 @@ export default createRoute(async (c) => {
     )
   }
 
+  const item = result.value
   const bgColor = getColorHex(item.color)
   const textColor = getTextColor(bgColor)
-  const iconClass = CATEGORY_ICONS[item.category]
+  const iconClass = CATEGORY_ICONS[item.category as CategoryValue]
 
   return c.render(
     <Layout>
@@ -124,7 +133,7 @@ export default createRoute(async (c) => {
                 aria-hidden="true"
               ></i>
               <span class="absolute top-4 left-4 px-4 py-2 text-sm font-medium rounded-xl bg-white/95 text-primary shadow-sm backdrop-blur-sm">
-                {CATEGORY_LABELS[item.category]}
+                {CATEGORY_LABELS[item.category as CategoryValue]}
               </span>
             </div>
           </Card>
@@ -141,7 +150,7 @@ export default createRoute(async (c) => {
                 <span class="w-28 text-secondary text-sm">カテゴリ</span>
                 <span class="flex items-center text-primary font-medium">
                   <i class={`fa-solid ${iconClass} mr-2 text-accent`} aria-hidden="true"></i>
-                  {CATEGORY_LABELS[item.category]}
+                  {CATEGORY_LABELS[item.category as CategoryValue]}
                 </span>
               </div>
 
@@ -179,11 +188,11 @@ export default createRoute(async (c) => {
               <div class="pt-4 text-sm text-secondary-light">
                 <div class="flex items-center mb-2">
                   <i class="fa-solid fa-clock mr-2 w-4 text-center" aria-hidden="true"></i>
-                  作成: {new Date(item.created_at).toLocaleDateString('ja-JP')}
+                  作成: {new Date(item.createdAt).toLocaleDateString('ja-JP')}
                 </div>
                 <div class="flex items-center">
                   <i class="fa-solid fa-pen mr-2 w-4 text-center" aria-hidden="true"></i>
-                  更新: {new Date(item.updated_at).toLocaleDateString('ja-JP')}
+                  更新: {new Date(item.updatedAt).toLocaleDateString('ja-JP')}
                 </div>
               </div>
             </div>

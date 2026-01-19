@@ -156,11 +156,11 @@ APIハンドラをユースケース呼び出しに移行する。
 SSRページをユースケース呼び出しに移行する。
 
 ### 作業内容
-- [ ] `app/routes/index.tsx` - ホームページ
-- [ ] `app/routes/items/new.tsx` - 新規作成ページ
-- [ ] `app/routes/items/[id]/index.tsx` - 詳細ページ
-- [ ] `app/routes/items/[id]/edit.tsx` - 編集ページ
-- [ ] `app/routes/items/[id]/delete.tsx` - 削除処理
+- [x] `app/routes/index.tsx` - ホームページ
+- [x] `app/routes/items/new.tsx` - 新規作成ページ
+- [x] `app/routes/items/[id]/index.tsx` - 詳細ページ
+- [x] `app/routes/items/[id]/edit.tsx` - 編集ページ
+- [x] `app/routes/items/[id]/delete.tsx` - 削除処理
 
 ### 変更対象
 - `app/routes/index.tsx`（修正）
@@ -172,8 +172,8 @@ SSRページをユースケース呼び出しに移行する。
 - 画面遷移が正常
 
 ### ユーザー確認項目
-- [ ] ブラウザでの動作確認（全ページ）
-- [ ] フォーム操作の確認
+- [x] ブラウザでの動作確認（全ページ）
+- [x] フォーム操作の確認
 
 ---
 
@@ -217,5 +217,5 @@ SSRページをユースケース呼び出しに移行する。
 | Phase 2: リポジトリ層 | 完了 | 2026-01-20 |
 | Phase 3: ユースケース層 | 完了 | 2026-01-20 |
 | Phase 4: ハンドラ層移行 | 完了 | 2026-01-20 |
-| Phase 5: SSRページ移行 | 未着手 | - |
+| Phase 5: SSRページ移行 | 完了 | 2026-01-20 |
 | Phase 6: クリーンアップ | 未着手 | - |

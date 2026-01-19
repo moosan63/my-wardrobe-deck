@@ -2,9 +2,9 @@ import { createRoute } from 'honox/factory'
 import { Layout } from '../../../components/layout/Layout'
 import { Button } from '../../../components/ui/Button'
 import { ItemForm } from '../../../components/items/ItemForm'
-import { getItemById, updateItem } from '../../../db/items'
-import { updateItemSchema } from '../../../lib/validation'
-import type { Category, Item } from '../../../types/item'
+import { GetItem, UpdateItem, type CategoryValue, type UpdateItemError, type ItemReadModel } from '../../../src/item'
+import { D1ItemRepository } from '../../../infrastructure/d1/item-repository-impl'
+import { D1ItemReadRepository } from '../../../infrastructure/d1/item-read-repository-impl'
 
 interface FormErrors {
   name?: string
@@ -15,39 +15,82 @@ interface FormErrors {
   general?: string
 }
 
+/**
+ * ItemReadModelからフォーム用のアイテム形式に変換
+ */
+function toFormItem(readModel: ItemReadModel) {
+  return {
+    id: readModel.id,
+    name: readModel.name,
+    category: readModel.category,
+    color: readModel.color,
+    brand: readModel.brand,
+    description: readModel.description,
+    created_at: readModel.createdAt,
+    updated_at: readModel.updatedAt,
+  }
+}
+
+/**
+ * UpdateItemErrorをフォームエラーに変換
+ */
+function mapUpdateItemErrorToFormErrors(error: UpdateItemError): FormErrors {
+  switch (error.type) {
+    case 'INVALID_ITEM_NAME':
+      return { name: error.message }
+    case 'INVALID_CATEGORY':
+      return { category: error.message }
+    case 'INVALID_COLOR':
+      return { color: error.message }
+    case 'ITEM_NOT_FOUND':
+      return { general: 'アイテムが見つかりませんでした' }
+    case 'DATABASE_ERROR':
+      return { general: 'アイテムの更新に失敗しました。もう一度お試しください。' }
+    default:
+      return { general: 'エラーが発生しました。もう一度お試しください。' }
+  }
+}
+
 // GET: 編集フォーム表示
 export default createRoute(async (c) => {
   const db = c.env.DB
   const idParam = c.req.param('id') ?? ''
   const id = parseInt(idParam, 10)
 
-  // IDバリデーション
-  if (isNaN(id) || id <= 0) {
-    return c.render(
-      <Layout>
-        <div class="container mx-auto px-4 py-8">
-          <div class="text-center py-16">
-            <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500/50 mb-4"></i>
-            <h2 class="text-xl font-medium text-primary mb-2">
-              無効なIDです
-            </h2>
-            <p class="text-secondary mb-6">
-              指定されたIDは有効ではありません
-            </p>
-            <Button variant="primary" href="/">
-              <i class="fa-solid fa-home mr-2"></i>
-              ホームに戻る
-            </Button>
+  // リポジトリとユースケースのインスタンス化
+  const itemReadRepository = new D1ItemReadRepository(db)
+  const getItem = new GetItem(itemReadRepository)
+
+  // ユースケースを実行してアイテムを取得
+  const result = await getItem.execute(id)
+
+  if (result.isErr()) {
+    const error = result.error
+
+    // IDバリデーションエラー
+    if (error.type === 'INVALID_ITEM_ID') {
+      return c.render(
+        <Layout>
+          <div class="container mx-auto px-4 py-8">
+            <div class="text-center py-16">
+              <i class="fa-solid fa-exclamation-triangle text-6xl text-red-500/50 mb-4"></i>
+              <h2 class="text-xl font-medium text-primary mb-2">
+                無効なIDです
+              </h2>
+              <p class="text-secondary mb-6">
+                指定されたIDは有効ではありません
+              </p>
+              <Button variant="primary" href="/">
+                <i class="fa-solid fa-home mr-2"></i>
+                ホームに戻る
+              </Button>
+            </div>
           </div>
-        </div>
-      </Layout>
-    )
-  }
+        </Layout>
+      )
+    }
 
-  // アイテム取得
-  const item = await getItemById(db, id)
-
-  if (!item) {
+    // アイテムが見つからない、またはその他のエラー
     return c.render(
       <Layout>
         <div class="container mx-auto px-4 py-8">
@@ -68,6 +111,8 @@ export default createRoute(async (c) => {
       </Layout>
     )
   }
+
+  const item = toFormItem(result.value)
 
   return c.render(
     <Layout>
@@ -121,28 +166,28 @@ export const POST = createRoute(async (c) => {
   const idParam = c.req.param('id') ?? ''
   const id = parseInt(idParam, 10)
 
-  // IDバリデーション
-  if (isNaN(id) || id <= 0) {
-    return c.redirect('/', 302)
-  }
-
   const body = await c.req.parseBody()
   let errors: FormErrors = {}
 
   // フォームデータを取得
-  const formData: Partial<Item> = {
+  const formData = {
     id,
     name: (body.name as string) ?? '',
-    category: (body.category as Category) ?? 'tops',
+    category: (body.category as CategoryValue) ?? 'tops',
     color: (body.color as string) ?? '',
     brand: (body.brand as string) || null,
     description: (body.description as string) || null,
-    created_at: '',
-    updated_at: '',
   }
 
-  // バリデーション
-  const validationResult = updateItemSchema.safeParse({
+  // リポジトリとユースケースのインスタンス化
+  const itemRepository = new D1ItemRepository(db)
+  const itemReadRepository = new D1ItemReadRepository(db)
+  const updateItem = new UpdateItem(itemRepository, itemReadRepository)
+  const getItem = new GetItem(itemReadRepository)
+
+  // ユースケースを実行
+  const result = await updateItem.execute({
+    id: formData.id,
     name: formData.name,
     category: formData.category,
     color: formData.color,
@@ -150,39 +195,31 @@ export const POST = createRoute(async (c) => {
     description: formData.description,
   })
 
-  if (!validationResult.success) {
-    // バリデーションエラーをフィールドごとに振り分け
-    for (const err of validationResult.error.errors) {
-      const field = err.path[0] as keyof FormErrors
-      if (field && !errors[field]) {
-        errors[field] = err.message
-      }
-    }
-  } else {
-    // アイテム更新
-    try {
-      const updated = await updateItem(db, id, validationResult.data)
-      if (updated) {
-        // 成功したら詳細ページにリダイレクト
-        return c.redirect(`/items/${id}`, 302)
-      } else {
-        errors.general = 'アイテムが見つかりませんでした'
-      }
-    } catch (e) {
-      console.error('Failed to update item:', e)
-      errors.general = 'アイテムの更新に失敗しました。もう一度お試しください。'
-    }
+  if (result.isOk()) {
+    // 成功したら詳細ページにリダイレクト
+    return c.redirect(`/items/${id}`, 302)
   }
 
-  // エラー時はフォームを再表示
-  const existingItem = await getItemById(db, id)
+  // エラー時はフォームエラーに変換
+  errors = mapUpdateItemErrorToFormErrors(result.error)
+  console.error('Failed to update item:', result.error)
 
-  if (!existingItem) {
+  // INVALID_ITEM_IDの場合はホームにリダイレクト
+  if (result.error.type === 'INVALID_ITEM_ID') {
     return c.redirect('/', 302)
   }
 
+  // エラー時はフォームを再表示
+  const existingItemResult = await getItem.execute(id)
+
+  if (existingItemResult.isErr()) {
+    return c.redirect('/', 302)
+  }
+
+  const existingItem = toFormItem(existingItemResult.value)
+
   // フォームに表示するデータ（エラー時は送信データを保持）
-  const displayItem: Item = {
+  const displayItem = {
     id: existingItem.id,
     name: formData.name ?? existingItem.name,
     category: formData.category ?? existingItem.category,

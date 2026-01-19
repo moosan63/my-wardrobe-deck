@@ -1,9 +1,9 @@
 import { createRoute } from 'honox/factory'
 import { Layout } from '../../components/layout/Layout'
 import { ItemForm } from '../../components/items/ItemForm'
-import { createItem } from '../../db/items'
-import { createItemSchema } from '../../lib/validation'
-import type { Category } from '../../types/item'
+import { CreateItem, type CategoryValue, type CreateItemError } from '../../src/item'
+import { D1ItemRepository } from '../../infrastructure/d1/item-repository-impl'
+import { D1ItemReadRepository } from '../../infrastructure/d1/item-read-repository-impl'
 
 interface FormErrors {
   name?: string
@@ -12,6 +12,24 @@ interface FormErrors {
   brand?: string
   description?: string
   general?: string
+}
+
+/**
+ * CreateItemErrorをフォームエラーに変換
+ */
+function mapCreateItemErrorToFormErrors(error: CreateItemError): FormErrors {
+  switch (error.type) {
+    case 'INVALID_ITEM_NAME':
+      return { name: error.message }
+    case 'INVALID_CATEGORY':
+      return { category: error.message }
+    case 'INVALID_COLOR':
+      return { color: error.message }
+    case 'DATABASE_ERROR':
+      return { general: 'アイテムの作成に失敗しました。もう一度お試しください。' }
+    default:
+      return { general: 'エラーが発生しました。もう一度お試しください。' }
+  }
 }
 
 // GET: フォーム表示
@@ -72,8 +90,13 @@ export const POST = createRoute(async (c) => {
     description: (body.description as string) ?? '',
   }
 
-  // バリデーション
-  const validationResult = createItemSchema.safeParse({
+  // リポジトリとユースケースのインスタンス化
+  const itemRepository = new D1ItemRepository(db)
+  const itemReadRepository = new D1ItemReadRepository(db)
+  const createItem = new CreateItem(itemRepository, itemReadRepository)
+
+  // ユースケースを実行
+  const result = await createItem.execute({
     name: formData.name,
     category: formData.category,
     color: formData.color,
@@ -81,25 +104,14 @@ export const POST = createRoute(async (c) => {
     description: formData.description || null,
   })
 
-  if (!validationResult.success) {
-    // バリデーションエラーをフィールドごとに振り分け
-    for (const err of validationResult.error.errors) {
-      const field = err.path[0] as keyof FormErrors
-      if (field && !errors[field]) {
-        errors[field] = err.message
-      }
-    }
-  } else {
-    // アイテム作成
-    try {
-      await createItem(db, validationResult.data)
-      // 成功したら一覧にリダイレクト
-      return c.redirect('/', 302)
-    } catch (e) {
-      console.error('Failed to create item:', e)
-      errors.general = 'アイテムの作成に失敗しました。もう一度お試しください。'
-    }
+  if (result.isOk()) {
+    // 成功したら一覧にリダイレクト
+    return c.redirect('/', 302)
   }
+
+  // エラー時はフォームエラーに変換
+  errors = mapCreateItemErrorToFormErrors(result.error)
+  console.error('Failed to create item:', result.error)
 
   // エラー時はフォームを再表示
   return c.render(
@@ -139,7 +151,7 @@ export const POST = createRoute(async (c) => {
               item={formData.name ? {
                 id: 0,
                 name: formData.name,
-                category: formData.category as Category,
+                category: formData.category as CategoryValue,
                 color: formData.color,
                 brand: formData.brand || null,
                 description: formData.description || null,

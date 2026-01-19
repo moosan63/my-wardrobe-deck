@@ -1,25 +1,32 @@
 import { createRoute } from 'honox/factory'
-import { getAllItems } from '../db/items'
+import { ListItems, type ItemListReadModel, type CategoryValue } from '../src/item'
+import { D1ItemReadRepository } from '../infrastructure/d1/item-read-repository-impl'
 import { CATEGORIES } from '../lib/constants'
-import type { Item, Category } from '../types/item'
 import { Layout } from '../components/layout/Layout'
 import { CategorySection } from '../components/items/CategorySection'
 import { Button } from '../components/ui/Button'
 
 export default createRoute(async (c) => {
   const db = c.env.DB
-  let items: Item[] = []
+  let items: ItemListReadModel[] = []
   let error: string | null = null
 
-  try {
-    items = await getAllItems(db)
-  } catch (e) {
+  // リポジトリとユースケースのインスタンス化
+  const itemReadRepository = new D1ItemReadRepository(db)
+  const listItems = new ListItems(itemReadRepository)
+
+  // ユースケースを実行してアイテム一覧を取得
+  const result = await listItems.execute()
+
+  if (result.isErr()) {
     error = 'アイテムの取得に失敗しました'
-    console.error('Failed to fetch items:', e)
+    console.error('Failed to fetch items:', result.error)
+  } else {
+    items = result.value
   }
 
   // カテゴリごとにグループ化
-  const itemsByCategory: Record<Category, Item[]> = {
+  const itemsByCategory: Record<CategoryValue, ItemListReadModel[]> = {
     outer: [],
     tops: [],
     bottoms: [],
