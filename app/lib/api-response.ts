@@ -1,4 +1,6 @@
 import type { Context } from 'hono'
+import type { ItemError } from '../src/item/domain'
+import type { DatabaseError } from '../shared/errors'
 
 /**
  * APIレスポンスの共通フォーマット
@@ -10,6 +12,11 @@ export interface ApiResponse<T = unknown> {
     message: string
   }
 }
+
+/**
+ * ユースケース層から返されるエラー型の共用型
+ */
+export type UsecaseError = ItemError | DatabaseError
 
 /**
  * 成功レスポンスを返す（200 OK）
@@ -74,4 +81,33 @@ export function serverErrorResponse(c: Context, message: string = 'Internal serv
     },
     500
   )
+}
+
+/**
+ * UsecaseErrorをHTTPレスポンスに変換する
+ * エラーからHTTPステータスへのマッピング:
+ * - INVALID_ITEM_ID, INVALID_ITEM_NAME, INVALID_CATEGORY, INVALID_COLOR: 400 Bad Request
+ * - ITEM_NOT_FOUND: 404 Not Found
+ * - DATABASE_ERROR: 500 Internal Server Error
+ */
+export function errorToResponse(c: Context, error: UsecaseError): Response {
+  switch (error.type) {
+    case 'INVALID_ITEM_ID':
+      return badRequestResponse(c, `Invalid id: ${error.message}`)
+    case 'INVALID_ITEM_NAME':
+      return badRequestResponse(c, `name: ${error.message}`)
+    case 'INVALID_CATEGORY':
+      return badRequestResponse(c, `category: ${error.message}`)
+    case 'INVALID_COLOR':
+      return badRequestResponse(c, `color: ${error.message}`)
+    case 'ITEM_NOT_FOUND':
+      return notFoundResponse(c, `Item not found: id=${error.id}`)
+    case 'DATABASE_ERROR':
+      console.error('Database error:', error.cause)
+      return serverErrorResponse(c)
+    default:
+      // 未知のエラー型の場合は500を返す
+      console.error('Unknown error:', error)
+      return serverErrorResponse(c)
+  }
 }
